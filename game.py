@@ -74,8 +74,54 @@ def show_word(word):
     print("===========================")
 
 
+def show_mistyped_words(words):
+    print("===========================")
+    print("M I S T Y P E D   W O R D S")
+    print("ACTUAL\t\t\tTYPED")
+
+    for word in words:
+        print(f"{word[0]}\t\t\t{word[1]}")
+
+    print("===========================")
+
+    time.sleep(3)
+
+
+def show_score(score, time_passed):
+    clear_terminal()
+    print(f"You scored {score} points in {time_passed} seconds!")
+    time.sleep(3)
+
+
+def game_over():
+    print(
+        """
+ ██████╗  █████╗ ███╗   ███╗███████╗
+██╔════╝ ██╔══██╗████╗ ████║██╔════╝
+██║  ███╗███████║██╔████╔██║█████╗  
+██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  
+╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗
+ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝                                 
+""",
+        end="\t",
+    )
+    time.sleep(1)
+    print(
+        """
+ ██████╗ ██╗   ██╗███████╗██████╗ 
+██╔═══██╗██║   ██║██╔════╝██╔══██╗
+██║   ██║██║   ██║█████╗  ██████╔╝
+██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗
+╚██████╔╝ ╚████╔╝ ███████╗██║  ██║
+ ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝                                                                   
+"""
+    )
+
+    time.sleep(3)
+
+
 def game_loop():
-    clear_terminal()    
+    clear_terminal()
 
     if not instructions():
         return
@@ -83,17 +129,29 @@ def game_loop():
     timer()
 
     words = load_file("words.txt")
-    score_system = {3: 1, 4: 3, 5: 5}
+    score_system = {3: 2, 4: 5, 5: 7}
+    mistyped_words = []
     total_score = 0
-    
+
+    start_time = time.time()
     while len(words) > 0:
         word = get_random_word(words).lower()
-        typed_word = ""
+        print(f"{len(words)} words left...")
+        show_word(word)
 
-        while typed_word != word:
-            show_word(word)
-            typed_word = input("Enter word: ")
+        typed_word = input("Enter word: ")
 
-        total_score += score_system[len(word)]
+        if typed_word == word:
+            total_score += score_system[len(word)]
+        else:
+            mistyped_words.append([word, typed_word])
+
+    time_passed = round(time.time() - start_time, 2)
+
+    game_over()
+    show_score(total_score, time_passed)
+    show_mistyped_words(mistyped_words)
+
+    input("\nPress enter to continue... ")
 
     return total_score
