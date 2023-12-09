@@ -2,21 +2,36 @@ import time
 import random
 
 from utils import *
+from leaderboards import *
 
 
-def get_random_word(words):
-    return words.pop(words.index(random.choice(words)))
+def get_random(texts):
+    return texts.pop(texts.index(random.choice(texts)))
 
 
-def instructions():
+def get_texts(path, word_freq):
+    selected_texts = set()
+    texts = load_file(path)
+
+    for _ in range(word_freq):
+        text = get_random(texts)
+        selected_texts.add(text)
+
+    return list(selected_texts)
+
+
+def instructions(progammer_mode=False):
     print(
-        """
-INSTRUCTIONS: Type the word that will be shown to you as fast as you can!
-              You will be typing 45 words total.
+        f"""
+___    _____ _     ________ _     __
+ | |\|(_  | |_)| |/   |  | / \|\|(_ 
+_|_| |__) | | \|_|\__ | _|_\_/| |__)
+    
+  Type the {'code statements' if progammer_mode else 'words'} that will be shown to you as fast as you can!
         """
     )
 
-    start_confirm = input("Are you ready? [Y/N]:  ").upper()
+    start_confirm = input("  Are you ready? [Y/N]:  ").upper()
     clear_terminal()
 
     if start_confirm == "Y":
@@ -28,36 +43,36 @@ INSTRUCTIONS: Type the word that will be shown to you as fast as you can!
 def timer():
     print(
         """
-██████╗ 
-╚════██╗
- █████╔╝
- ╚═══██╗
-██████╔╝
-╚═════╝ 
+██████╗          
+╚════██╗         
+ █████╔╝         
+ ╚═══██╗         
+██████╔╝██╗██╗██╗
+╚═════╝ ╚═╝╚═╝╚═╝
         """
     )
     time.sleep(1)
     clear_terminal()
     print(
         """
-██████╗ 
-╚════██╗
- █████╔╝
-██╔═══╝ 
-███████╗
-╚══════╝
+██████╗          
+╚════██╗         
+ █████╔╝         
+██╔═══╝          
+███████╗██╗██╗██╗
+╚══════╝╚═╝╚═╝╚═╝
         """
     )
     time.sleep(1)
     clear_terminal()
     print(
         """
- ██╗
-███║
-╚██║
- ██║
- ██║
- ╚═╝
+ ██╗         
+███║         
+╚██║         
+ ██║         
+ ██║██╗██╗██╗
+ ╚═╝╚═╝╚═╝╚═╝
         """
     )
     time.sleep(1)
@@ -65,32 +80,33 @@ def timer():
     return
 
 
-def show_word(word):
+def show_text(text):
     clear_terminal()
-    print("===========================")
-    print(f"|{' ' * 25}|")
-    print(f"|{word : ^25}|")
-    print(f"|{' ' * 25}|")
-    print("===========================")
+
+    spaces = 25 if len(text) <= 5 else len(text) + 5
+    print("=" * (spaces + 2))
+    print(f"|{' ' * spaces}|")
+    print(f"|{text : ^{spaces}}|")
+    print(f"|{' ' * spaces}|")
+    print("=" * (spaces + 2))
 
 
-def show_mistyped_words(words):
-    print("===========================")
-    print("M I S T Y P E D   W O R D S")
-    print("ACTUAL\t\t\tTYPED")
+def show_mistyped_texts(words):
+    clear_terminal()
+    print(
+        """
+   ___ _____\ / _  __ _        _  _  _  __
+|V| | (_  |  Y |_)|_ | \   | |/ \|_)| \(_ 
+| |_|___) |  | |  |__|_/   |^|\_/| \|_/__)
+"""
+    )
+    print("ACTUAL\t\t\t\tTYPED")
 
     for word in words:
         print(f"{word[0]}\t\t\t{word[1]}")
 
     print("===========================")
-
-    time.sleep(3)
-
-
-def show_score(score, time_passed):
-    clear_terminal()
-    print(f"You scored {score} points in {time_passed} seconds!")
-    time.sleep(3)
+    input("\nPress [ENTER] to continue... ")
 
 
 def game_over():
@@ -120,7 +136,7 @@ def game_over():
     time.sleep(3)
 
 
-def game_loop():
+def normal_mode():
     clear_terminal()
 
     if not instructions():
@@ -128,16 +144,20 @@ def game_loop():
 
     timer()
 
-    words = load_file("words.txt")
+    words = (
+        get_texts("texts/three_letter.txt", 15)
+        + get_texts("texts/four_letter.txt", 15)
+        + get_texts("texts/five_letter.txt", 15)
+    )
+
     score_system = {3: 2, 4: 5, 5: 7}
     mistyped_words = []
     total_score = 0
 
     start_time = time.time()
     while len(words) > 0:
-        word = get_random_word(words).lower()
-        print(f"{len(words)} words left...")
-        show_word(word)
+        word = get_random(words).lower()
+        show_text(word)
 
         typed_word = input("Enter word: ")
 
@@ -149,9 +169,73 @@ def game_loop():
     time_passed = round(time.time() - start_time, 2)
 
     game_over()
-    show_score(total_score, time_passed)
-    show_mistyped_words(mistyped_words)
 
-    input("\nPress enter to continue... ")
+    clear_terminal()
+    print(f"You scored {total_score} points in {time_passed} seconds!")
+    time.sleep(3)
 
-    return total_score
+    clear_input_buffer()
+    show_mistyped_texts(mistyped_words)
+
+    insert_to_leaderboard(time_passed, total_score)
+    show_leaderboard()
+
+    input("\nPress [ENTER] to continue... ")
+
+
+def programmer_mode():
+    clear_terminal()
+
+    if not instructions(True):
+        return
+
+    timer()
+
+    lines = get_texts("texts/code_lines.txt", 5)
+
+    mistyped_chars = 0
+    typed_chars = 0
+    total_characters = 0
+
+    start_time = time.time()
+    while len(lines) > 0:
+        line = get_random(lines)
+        total_characters += len(line)
+
+        show_text(line)
+
+        typed_line = input("Enter word: ")
+        typed_chars += len(typed_line)
+        mistyped_chars += len(line)
+
+        if typed_line != line:
+            for chr in typed_line:
+                iter_count = 0
+                for letter in line:
+                    iter_count += 1
+                    if chr == letter or iter_count == 3:
+                        mistyped_chars -= 1
+                        line = line[line.index(letter) + 1 :]
+                        break
+        else:
+            mistyped_chars -= len(line)
+
+    time_passed = round(time.time() - start_time, 2)
+
+    game_over()
+
+    accuracy = (total_characters - mistyped_chars) / total_characters
+    lines_per_minute = max(0, ((typed_chars / 5) - mistyped_chars) / (time_passed / 60))
+
+    clear_terminal()
+    clear_input_buffer()
+
+    print(
+        f"You typed {lines_per_minute:.2f} WPM with an accuracy rating of {(accuracy * 100):.2f}%..."
+    )
+    input("\nPress [ENTER] to continue... ")
+
+    insert_to_code_leaderboard(round(lines_per_minute, 2), round(accuracy, 2))
+    show_code_leaderboard()
+
+    input("\nPress [ENTER] to continue... ")

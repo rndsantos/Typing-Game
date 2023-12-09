@@ -1,0 +1,60 @@
+print(sum([i for i in range(1, 101)]))
+data = [x for x in "hello" if x != "l"]
+result = 1 if a > b else 0
+numbers = [int(x) for x in input().split()]
+for i, element in enumerate(string): print(f"{i+1}: {element}")
+console.log(Array.from({ length: 5 }).map((_, i) => i * 2))
+const evenNumbers = numbers.filter(num => num % 2 === 0)
+const sum = (a, b) => a + b
+const obj = { ...obj1, ...obj2 }
+document.getElementById('myBtn').addEventListener('click', () => console.log('Clicked!'))
+System.out.println(Arrays.stream(numbers).sum());
+List<Integer> evens = Arrays.stream(numbers).filter(n -> n % 2 == 0).collect(Collectors.toList());
+int sum = a > b ? a : b;
+Map<String, Integer> map = new HashMap<>() {{ put("one", 1); put("two", 2); }};
+button.addActionListener(e -> System.out.println("Button clicked!"));
+Console.WriteLine(Enumerable.Range(1, 100).Sum());
+List<int> evens = numbers.Where(n => n % 2 == 0).ToList();
+int sum = a > b ? a : b;
+Dictionary<string, int> map = new Dictionary<string, int> { { "one", 1 }, { "two", 2 } };
+button.Click += (sender, e) => Console.WriteLine("Button clicked!");
+fmt.Println(strings.Join(",", []string{"a", "b", "c"}))
+evenNumbers := []int{2, 4, 6}
+sum := func(a int, b int) int { return a + b }
+m := map[string]int{"one": 1, "two": 2}
+button.Click(func() { fmt.Println("Button clicked!") })
+echo array_sum(range(1, 100)) . PHP_EOL;
+$evens = array_filter($numbers, function($n) { return $n % 2 == 0; });
+$sum = $a > $b ? $a : $b;
+$map = ["one" => 1, "two" => 2,];
+$button->click(function() { echo "Button clicked!" . PHP_EOL; });
+os.makedirs("new_directory", exist_ok=True)
+data.sort(key=lambda x: x[1])
+with open("file.txt", "w") as f: f.write("Hello, world!")
+import random; random.shuffle(numbers)
+result = all(x > 0 for x in data)
+console.log([...new Set(string)]);
+const obj = JSON.parse(data);
+const sum = arr.reduce((acc, cur) => acc + cur, 0);
+const filteredNumbers = numbers.filter(n => n % 2 !== 0);
+const element = document.querySelector("#myElement");
+List<String> reversed = Arrays.stream(words).map(String::toUpperCase).collect(Collectors.toList());
+Optional<Integer> maxNumber = numbers.stream().max(Integer::compare);
+try { File file = new File("file.txt"); file.createNewFile(); } catch (IOException e) { e.printStackTrace(); }
+Collections.shuffle(numbers);
+boolean allPositive = IntStream.of(numbers).allMatch(n -> n > 0);
+var uniqueChars = string.Distinct().ToArray();
+var obj = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
+var sum = arr.Sum();
+var oddNumbers = numbers.Where(n => n % 2 != 0).ToArray();
+var element = document.getElementById("myElement");
+strings.ReplaceAll(sentence, " ", "-")
+json.Unmarshal([]byte(data), &obj)
+sum := 0
+for _, v := range arr { sum += v }
+oddNumbers := []int{}
+element := document.QuerySelector("#myElement").(*Element)
+implode(",", array_unique(str_split($string)));
+$obj = json_decode($data, true);
+$sum = array_sum($arr);
+$oddNumbers = array_filter($numbers, function($n) { return $n % 2 !== 0; });

@@ -1,15 +1,23 @@
 import os
-
-from sys import platform
+import sys
 
 
 def clear_terminal():
-    if platform == "linux" or platform == "linux2":
-        os.system("clear")
+    os.system("cls" if os.name == "nt" else "clear")
+
+
+def clear_input_buffer():
+    if os.name == "nt":
+        import msvcrt
+
+        while msvcrt.kbhit():
+            msvcrt.getch()
     else:
-        os.system("cls")
+        sys.stdin.read()
 
 
 def load_file(path):
     with open(path, "r") as file:
         return file.read().splitlines()
+
+
