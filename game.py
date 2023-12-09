@@ -100,7 +100,7 @@ def show_mistyped_texts(words):
 | |_|___) |  | |  |__|_/   |^|\_/| \|_/__)
 """
     )
-    print("ACTUAL\t\t\t\tTYPED")
+    print("ACTUAL\t\t\tTYPED")
 
     for word in words:
         print(f"{word[0]}\t\t\t{word[1]}")
