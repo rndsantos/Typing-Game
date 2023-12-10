@@ -27,8 +27,11 @@ def clear_input_buffer():
 
 
 def load_file(path):
-    with open(path, "r") as file:
-        return file.read().splitlines()
+    if os.path.exists(path):
+        with open(path, "r") as file:
+            return file.read().splitlines()
+
+    return []
 
 
 def get_random(texts):
