@@ -18,6 +18,7 @@ def show_leaderboard():
     for index, item in enumerate(leaderboard):
         name, time, score = item.split(",")
 
+        # names longer than 7 characters cause overflow,
         if len(name) > 7:
             name = f"{name[:5]}.."
 
@@ -37,7 +38,11 @@ def insert_to_leaderboard(time, score):
 
     entries = [item.split(",") for item in leaderboard]
 
-    name = input("Enter username: ")
+    name = ""
+    while name == "":
+        name = input("Enter username: ")
+        clear_terminal()
+
     for entry in entries:
         while name.lower() == entry[0].lower():
             clear_terminal()
@@ -45,6 +50,10 @@ def insert_to_leaderboard(time, score):
             name = input("Please enter a valid username: ")
 
     entries.append([name, str(time), str(score)])
+
+    # sort the list based on its time and score
+    # secondary sort: time
+    # primary sort: score
     entries.sort(key=lambda entry: float(entry[1]))
     entries.sort(key=lambda entry: int(entry[2]), reverse=True)
 
@@ -74,7 +83,7 @@ def show_code_leaderboard():
     )
 
     print("Rank\t\tName\t\tWPM\t\tAccuracy")
-    print("----\t\t----\t\t----\t\t-------")    
+    print("----\t\t----\t\t----\t\t-------")
     for index, item in enumerate(leaderboard):
         name, wpm, accuracy = item.split(",")
 
@@ -97,7 +106,11 @@ def insert_to_code_leaderboard(wpm, accuracy):
 
     entries = [item.split(",") for item in leaderboard]
 
-    name = input("Enter username: ")
+    name = ""
+    while name == "":
+        name = input("Enter username: ")
+        clear_terminal()
+
     for entry in entries:
         while name.lower() == entry[0].lower():
             clear_terminal()

@@ -1,23 +1,7 @@
 import time
-import random
 
 from utils import *
 from leaderboards import *
-
-
-def get_random(texts):
-    return texts.pop(texts.index(random.choice(texts)))
-
-
-def get_texts(path, word_freq):
-    selected_texts = set()
-    texts = load_file(path)
-
-    for _ in range(word_freq):
-        text = get_random(texts)
-        selected_texts.add(text)
-
-    return list(selected_texts)
 
 
 def instructions(progammer_mode=False):
@@ -137,6 +121,7 @@ def game_over():
 
 
 def normal_mode():
+    WORD_COUNT = 15
     clear_terminal()
 
     if not instructions():
@@ -145,21 +130,29 @@ def normal_mode():
     timer()
 
     words = (
-        get_texts("texts/three_letter.txt", 15)
-        + get_texts("texts/four_letter.txt", 15)
-        + get_texts("texts/five_letter.txt", 15)
+        get_texts("texts/three_letter.txt", WORD_COUNT)
+        + get_texts("texts/four_letter.txt", WORD_COUNT)
+        + get_texts("texts/five_letter.txt", WORD_COUNT)
     )
 
     score_system = {3: 2, 4: 5, 5: 7}
     mistyped_words = []
+    mistyped_characters = 0
+    typed_characters = 0
+    total_characters = 0
     total_score = 0
 
     start_time = time.time()
     while len(words) > 0:
         word = get_random(words).lower()
+        total_characters += len(word)
+
         show_text(word)
 
         typed_word = input("Enter word: ")
+
+        typed_characters += len(typed_word)
+        mistyped_characters += get_errors(word, typed_word)
 
         if typed_word == word:
             total_score += score_system[len(word)]
@@ -170,12 +163,20 @@ def normal_mode():
 
     game_over()
 
-    clear_terminal()
-    print(f"You scored {total_score} points in {time_passed} seconds!")
-    time.sleep(3)
+    accuracy = get_acccuracy(total_characters, mistyped_characters)
+    wpm = get_wpm(typed_characters, mistyped_characters, time_passed)
 
+    clear_terminal()
     clear_input_buffer()
-    show_mistyped_texts(mistyped_words)
+
+    print(f"You scored {total_score} points in {time_passed} seconds!")
+    print(
+        f"You typed {wpm:.2f} WPM with an accuracy rating of {(accuracy * 100):.2f}%..."
+    )
+    input("\nPress [ENTER] to continue... ")
+
+    if len(mistyped_words) > 0:
+        show_mistyped_texts(mistyped_words)
 
     insert_to_leaderboard(time_passed, total_score)
     show_leaderboard()
@@ -193,8 +194,8 @@ def programmer_mode():
 
     lines = get_texts("texts/code_lines.txt", 5)
 
-    mistyped_chars = 0
-    typed_chars = 0
+    mistyped_characters = 0
+    typed_characters = 0
     total_characters = 0
 
     start_time = time.time()
@@ -204,28 +205,17 @@ def programmer_mode():
 
         show_text(line)
 
-        typed_line = input("Enter word: ")
-        typed_chars += len(typed_line)
-        mistyped_chars += len(line)
+        typed_line = input("Enter text: ")
 
-        if typed_line != line:
-            for chr in typed_line:
-                iter_count = 0
-                for letter in line:
-                    iter_count += 1
-                    if chr == letter or iter_count == 3:
-                        mistyped_chars -= 1
-                        line = line[line.index(letter) + 1 :]
-                        break
-        else:
-            mistyped_chars -= len(line)
+        typed_characters += len(typed_line)
+        mistyped_characters += get_errors(line, typed_line)
 
     time_passed = round(time.time() - start_time, 2)
 
     game_over()
 
-    accuracy = (total_characters - mistyped_chars) / total_characters
-    lines_per_minute = max(0, ((typed_chars / 5) - mistyped_chars) / (time_passed / 60))
+    accuracy = get_acccuracy(total_characters, mistyped_characters)
+    lines_per_minute = get_wpm(typed_characters, mistyped_characters, time_passed)
 
     clear_terminal()
     clear_input_buffer()

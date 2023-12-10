@@ -1,3 +1,8 @@
+# AUTHOR: Roberto Neil Santos
+# SECTION: B-5L
+# COMPLETION DATE: 12-10-23
+# TYPING GAME: TIPO
+
 from game import normal_mode, programmer_mode
 from leaderboards import show_leaderboard, show_code_leaderboard
 from utils import *
