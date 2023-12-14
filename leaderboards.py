@@ -30,6 +30,8 @@ def show_leaderboard():
     if len(leaderboard) == 0:
         print("\n  Looks like no one has played yet...")
 
+    input("\nPress [ENTER] to go to Menu... ")
+
 
 def insert_to_leaderboard(time, score):
     clear_terminal()
@@ -97,6 +99,8 @@ def show_code_leaderboard():
 
     if len(leaderboard) == 0:
         print("\n  Looks like no one has played yet...")
+
+    input("\nPress [ENTER] to go to Menu... ")
 
 
 def insert_to_code_leaderboard(wpm, accuracy):

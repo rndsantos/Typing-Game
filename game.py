@@ -61,7 +61,6 @@ def timer():
     )
     time.sleep(1)
     clear_terminal()
-    return
 
 
 def show_text(text):

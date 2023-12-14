@@ -52,7 +52,7 @@ def game_menu():
         case "0":
             main()
         case _:
-            print("Invalid choice. Try again.")
+            game_menu()
 
 
 def leaderboard_menu():
@@ -80,7 +80,7 @@ def leaderboard_menu():
         case "0":
             main()
         case _:
-            print("Invalid choice. Try again.")
+            leaderboard_menu()
 
 
 def main():
@@ -94,12 +94,9 @@ def main():
                 game_menu()
             case "2":
                 leaderboard_menu()
-                input("\nPress [ENTER] to go to Menu... ")
             case "0":
                 print("Thanks for playing!")
                 exit()
-            case _:
-                print("Invalid choice. Try again.")
 
 
 main()

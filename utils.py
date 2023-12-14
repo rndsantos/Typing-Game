@@ -80,7 +80,7 @@ def get_errors(text, typed_text):
     int
     """
 
-    # how far to look for the typec letter in the remaining text
+    # how far to look for the typed letter in the remaining text
     # too far of a match will be considered an error
     CHECK_THRESHOLD = 3
     mistyped_characters = max(len(text), len(typed_text))
