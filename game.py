@@ -123,16 +123,16 @@ def normal_mode():
     WORD_COUNT = 15
     clear_terminal()
 
-    if not instructions():
-        return
-
-    timer()
-
     words = (
         get_texts("texts/three_letter.txt", WORD_COUNT)
         + get_texts("texts/four_letter.txt", WORD_COUNT)
         + get_texts("texts/five_letter.txt", WORD_COUNT)
     )
+
+    if not instructions():
+        return
+
+    timer()
 
     score_system = {3: 2, 4: 5, 5: 7}
     mistyped_words = []
@@ -180,18 +180,16 @@ def normal_mode():
     insert_to_leaderboard(time_passed, total_score)
     show_leaderboard()
 
-    input("\nPress [ENTER] to continue... ")
-
 
 def programmer_mode():
     clear_terminal()
+
+    lines = get_texts("texts/code_lines.txt", 5)
 
     if not instructions(True):
         return
 
     timer()
-
-    lines = get_texts("texts/code_lines.txt", 5)
 
     mistyped_characters = 0
     typed_characters = 0
@@ -226,5 +224,3 @@ def programmer_mode():
 
     insert_to_code_leaderboard(round(lines_per_minute, 2), round(accuracy, 2))
     show_code_leaderboard()
-
-    input("\nPress [ENTER] to continue... ")

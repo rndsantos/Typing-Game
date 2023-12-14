@@ -96,7 +96,7 @@ def main():
                 leaderboard_menu()
             case "0":
                 print("Thanks for playing!")
-                exit()
+                sys.exit()
 
 
 main()

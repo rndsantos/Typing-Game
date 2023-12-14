@@ -58,6 +58,11 @@ def get_texts(path, word_count):
     selected_texts = set()
     texts = load_file(path)
 
+    if not texts:
+        sys.exit(
+            "An exception has occured. Contact admin for support.\nSome word texts are missing."
+        )
+
     for _ in range(word_count):
         text = get_random(texts)
         selected_texts.add(text)
